@@ -6,10 +6,21 @@
 	overflow: scroll;
 	transform: translate(-616px);
 	transition: transform 0.5s ease;
+	z-index: 1000;
 }
 
 .container_open {
 	transform: translate(0);
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.3);
+	z-index: 999;
 }
 
 .form {
@@ -25,8 +36,20 @@
 	border-right: 1px solid #000000;
 }
 
+.formContent {
+	display: flex;
+	flex-direction: column;
+	gap: 24px; 
+	padding-bottom: 24px;
+}
+
 .bottomContainer {
 	display: flex;
 	justify-content: space-between;
 	margin-top: auto;
+	gap: 24px;
+	
+	button {
+		flex: 1;
+	}
 }
