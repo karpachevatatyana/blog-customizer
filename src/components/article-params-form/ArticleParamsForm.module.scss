@@ -13,16 +13,6 @@
 	transform: translate(0);
 }
 
-.overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background: rgba(0, 0, 0, 0.3);
-	z-index: 999;
-}
-
 .form {
 	display: flex;
 	flex-shrink: 0;
@@ -36,10 +26,14 @@
 	border-right: 1px solid #000000;
 }
 
+.title {
+	margin-bottom: 50px; 
+}
+
 .formContent {
 	display: flex;
 	flex-direction: column;
-	gap: 24px; 
+	gap: 24px;
 	padding-bottom: 24px;
 }
 
@@ -48,7 +42,7 @@
 	justify-content: space-between;
 	margin-top: auto;
 	gap: 24px;
-	
+
 	button {
 		flex: 1;
 	}

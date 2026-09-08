@@ -1,4 +1,3 @@
-// src/components/article-params-form/ArticleParamsForm.tsx
 import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 
@@ -7,6 +6,7 @@ import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
+import { Text } from 'src/ui/text';
 
 import {
 	fontFamilyOptions,
@@ -26,31 +26,27 @@ type ArticleParamsFormProps = {
 	onReset: () => void;
 };
 
-export const ArticleParamsForm = ({ 
-	currentState, 
-	onApply, 
-	onReset 
+export const ArticleParamsForm = ({
+	currentState,
+	onApply,
+	onReset,
 }: ArticleParamsFormProps) => {
-	// Состояние открытия сайдбара
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	
-	// Локальное состояние формы (изменяется до применения)
 	const [formState, setFormState] = useState<ArticleStateType>(currentState);
-	
-	// Ссылка на сайдбар для определения кликов вне него
-	const sidebarRef = useRef<HTMLDivElement>(null);
+	const sidebarRef = useRef<HTMLElement>(null);
 
-	// Обновляем локальное состояние при изменении currentState (например, после сброса)
 	useEffect(() => {
 		setFormState(currentState);
 	}, [currentState]);
 
-	// Обработчик клика вне сайдбара
 	useEffect(() => {
+		if (!isOpen) {
+			return;
+		}
+
 		const handleOutsideClick = (event: MouseEvent) => {
 			if (
-				isOpen && 
-				sidebarRef.current && 
+				sidebarRef.current &&
 				!sidebarRef.current.contains(event.target as Node) &&
 				!(event.target as Element).closest('.arrow-button-container')
 			) {
@@ -58,30 +54,25 @@ export const ArticleParamsForm = ({
 			}
 		};
 
-		if (isOpen) {
-			document.addEventListener('mousedown', handleOutsideClick);
-		}
+		document.addEventListener('mousedown', handleOutsideClick);
 
 		return () => {
 			document.removeEventListener('mousedown', handleOutsideClick);
 		};
 	}, [isOpen]);
 
-	// Обработчик применения настроек
 	const handleApply = (e: React.FormEvent) => {
 		e.preventDefault();
 		onApply(formState);
 		setIsOpen(false);
 	};
 
-	// Обработчик сброса настроек
 	const handleReset = () => {
 		onReset();
 		setFormState(defaultArticleState);
 		setIsOpen(false);
 	};
 
-	// Обработчик изменения значения в форме
 	const handleChange = <K extends keyof ArticleStateType>(
 		key: K,
 		value: ArticleStateType[K]
@@ -95,27 +86,22 @@ export const ArticleParamsForm = ({
 	return (
 		<>
 			<div className="arrow-button-container">
-				<ArrowButton 
-					isOpen={isOpen} 
-					onClick={() => setIsOpen(!isOpen)} 
-				/>
+				<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
 			</div>
-			
-			{/* Оверлей */}
-			{isOpen && (
-				<div 
-					className={styles.overlay}
-					onClick={() => setIsOpen(false)}
-				/>
-			)}
-			
-			<aside 
+
+			<aside
 				ref={sidebarRef}
 				className={clsx(styles.container, {
 					[styles.container_open]: isOpen,
-				})}
-			>
+				})}>
 				<form className={styles.form} onSubmit={handleApply}>
+					{/* Заголовок - размер 31, uppercase, отступ снизу 50px */}
+					<div className={styles.title}>
+						<Text size={31} weight={800} uppercase align="left">
+							Задайте параметры
+						</Text>
+					</div>
+
 					<div className={styles.formContent}>
 						<Select
 							title="Шрифт"
@@ -123,9 +109,7 @@ export const ArticleParamsForm = ({
 							options={fontFamilyOptions}
 							onChange={(option) => handleChange('fontFamilyOption', option)}
 						/>
-						
-						<Separator />
-						
+
 						<RadioGroup
 							name="fontSize"
 							title="Размер шрифта"
@@ -133,27 +117,23 @@ export const ArticleParamsForm = ({
 							options={fontSizeOptions}
 							onChange={(option) => handleChange('fontSizeOption', option)}
 						/>
-						
-						<Separator />
-						
+
 						<Select
 							title="Цвет шрифта"
 							selected={formState.fontColor}
 							options={fontColors}
 							onChange={(option) => handleChange('fontColor', option)}
 						/>
-						
+
 						<Separator />
-						
+
 						<Select
 							title="Цвет фона"
 							selected={formState.backgroundColor}
 							options={backgroundColors}
 							onChange={(option) => handleChange('backgroundColor', option)}
 						/>
-						
-						<Separator />
-						
+
 						<Select
 							title="Ширина контента"
 							selected={formState.contentWidth}
@@ -161,19 +141,15 @@ export const ArticleParamsForm = ({
 							onChange={(option) => handleChange('contentWidth', option)}
 						/>
 					</div>
-					
+
 					<div className={styles.bottomContainer}>
-						<Button 
-							title="Сбросить" 
-							htmlType="reset" 
-							type="clear" 
+						<Button
+							title="Сбросить"
+							htmlType="reset"
+							type="clear"
 							onClick={handleReset}
 						/>
-						<Button 
-							title="Применить" 
-							htmlType="submit" 
-							type="apply" 
-						/>
+						<Button title="Применить" htmlType="submit" type="apply" />
 					</div>
 				</form>
 			</aside>
