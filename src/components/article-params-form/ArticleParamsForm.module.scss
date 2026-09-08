@@ -6,6 +6,7 @@
 	overflow: scroll;
 	transform: translate(-616px);
 	transition: transform 0.5s ease;
+	z-index: 1000;
 }
 
 .container_open {
@@ -25,8 +26,25 @@
 	border-right: 1px solid #000000;
 }
 
+.title {
+	margin-bottom: 50px; 
+}
+
+.formContent {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding-bottom: 24px;
+}
+
 .bottomContainer {
 	display: flex;
 	justify-content: space-between;
 	margin-top: auto;
+	gap: 24px;
+
+	button {
+		width: 180px;
+		height: 48px;
+	}
 }
